@@ -1,4 +1,5 @@
 import njwt from 'njwt';
+const usersService = require('./users-service');
 
 export const users = [{
     id: '1',
@@ -64,7 +65,7 @@ export async function isAuthenticatedMiddleware(req, res, next) {
 // data.
 export async function jwtLogin(req, res) {
     const { email, password } = req.body;
-    const user = users.find(user => user.email === email && user.password === password);
+    const user = await usersService.getUser(email, password);
 
     if (!user) {
         res.status(401);

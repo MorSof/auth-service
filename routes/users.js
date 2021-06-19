@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
 router.post('/register', async function register(req, res) {
   try {
     const { email, password, fullName } = req.body;
-    const newUser = await usersService.getBlockById(email, password, fullName);
+    const newUser = await usersService.register(email, password, fullName);
     res.json(newUser);
   } catch (err) {
     console.error(err);
