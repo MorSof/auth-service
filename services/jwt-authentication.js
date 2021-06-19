@@ -65,13 +65,13 @@ export async function isAuthenticatedMiddleware(req, res, next) {
 // data.
 export async function jwtLogin(req, res) {
     const { email, password } = req.body;
-    const user = await usersService.getUser(email, password);
+    const user = await usersService.login(email, password);
 
     if (!user) {
         res.status(401);
         return res.json({ error: 'Invalid email or password' });
     }
 
-    const accessToken = encodeToken({ userId: user.id });
+    const accessToken = encodeToken({ email: email });
     return res.json({ accessToken });
 }

@@ -1,6 +1,6 @@
 const UsersModel = require("./clients/mongo");
 
-async function getUser(email, password) {
+async function login(email, password) {
     const user = await UsersModel.findOne({email: email, password: password});
     return user;
 }
@@ -11,4 +11,9 @@ async function register(email, password, fullName) {
     return user;
 }
 
-module.exports = {register, getUser};
+async function getUserByEmail(email) {
+    const user = await UsersModel.findOne({email: email});
+    return user;
+}
+
+module.exports = {register, login, getUserByEmail};
