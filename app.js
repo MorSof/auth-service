@@ -8,7 +8,8 @@ var nnode = require('nnode');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var messagesRouter = require('./routes/messages');
-const {jwtLogin} = require('./services/jwt-authentication');
+const bodyParser = require("body-parser");
+const {jwtLogin, jwtAuthenticationMiddleware} = require('./services/jwt-authentication');
 
 var app = express();
 
@@ -21,6 +22,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(bodyParser.json());
+app.use(jwtAuthenticationMiddleware);
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

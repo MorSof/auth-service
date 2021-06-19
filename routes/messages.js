@@ -29,8 +29,7 @@ router.post('/', isAuthenticatedMiddleware, async function post(req, res) {
 })
 
 function getUserIdFromAuthenticatedRequest(req) {
-    return '1'; // hardcoding for now, pending authentication implementation
+    return req.userId;
 }
-
 
 module.exports = router;
