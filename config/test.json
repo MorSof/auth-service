@@ -1,0 +1,6 @@
+{
+  "env": "development",
+  "mongo": {
+    "host": "mongodb://localhost/users"
+  }
+}

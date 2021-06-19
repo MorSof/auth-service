@@ -1,8 +1,12 @@
 const express = require('express');
+const {jwtLogin} = require("../services/jwt-authentication");
+const {jwtAuthenticationMiddleware} = require("../services/jwt-authentication");
 const {isAuthenticatedMiddleware} = require("../services/jwt-authentication");
 const router = express.Router();
 
 const messages = [];
+
+router.use(jwtAuthenticationMiddleware);
 
 router.get('/', isAuthenticatedMiddleware, function getAll(req, res) {
     const userId = getUserIdFromAuthenticatedRequest(req);
