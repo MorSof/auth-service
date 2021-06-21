@@ -22,7 +22,6 @@ export const jwtAuthenticationMiddleware = async (req, res, next) => {
         const {email} = decoded;
 
         if (await usersService.getUserByEmail(email)) {
-            console.log('found user!');
             req.email = email;
         }
     } catch (e) {
@@ -40,7 +39,7 @@ export async function isAuthenticatedMiddleware(req, res, next) {
     res.status(401).json({ error: 'User not authenticated' });
 }
 
-// This endpoints generates and returns a JWT access token given authentication data.
+// This service generates and returns a JWT access token given authentication data.
 export async function jwtLogin(req, res) {
     const { email, password } = req.body;
     const user = await usersService.login(email, password);

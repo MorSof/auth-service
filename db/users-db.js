@@ -6,12 +6,9 @@ async function login(email, password) {
 }
 
 async function register(email, password, fullName) {
-    let user = {email, password, fullName}
-    if (await UsersModel.findOne({email: email})){
-        throw new Error("Email already exists");
-    }
-    await (new UsersModel(user).save());
-    return user;
+    let user = {email, password, fullName};
+    await new UsersModel(user).save();
+    return {email, fullName};
 }
 
 async function getUserByEmail(email) {
