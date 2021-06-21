@@ -1,20 +1,7 @@
 import njwt from 'njwt';
 const usersService = require('./users-service');
 
-export const users = [{
-    id: '1',
-    email: 'first.user@gmail.com',
-    password: 'password', // please note that it's NEVER a good idea to store passwords directly nor have passwords `password`
-}, {
-    id: '2',
-    email: 'second.user@gmail.com',
-    password: 'password',
-}];
-
-const {
-    APP_SECRET = 'something really random',
-    APP_BASE_URL = 'http://localhost:3005'
-} = process.env;
+const {APP_SECRET = 'something really random'} = process.env;
 
 export function encodeToken(tokenData) {
     return njwt.create(tokenData, APP_SECRET).compact();
@@ -24,10 +11,7 @@ export function decodeToken(token) {
     return njwt.verify(token, APP_SECRET).body;
 }
 
-// This express middleware attaches `userId` to the `req` object if a user is
-// authenticated. This middleware expects a JWT token to be stored in the
-// `Access-Token` header.
-export const jwtAuthenticationMiddleware = (req, res, next) => {
+export const jwtAuthenticationMiddleware = async (req, res, next) => {
     const token = req.header('Access-Token');
     if (!token) {
         return next();
@@ -35,14 +19,11 @@ export const jwtAuthenticationMiddleware = (req, res, next) => {
 
     try {
         const decoded = decodeToken(token);
-        const { userId } = decoded;
+        const {email} = decoded;
 
-        console.log('decoded', decoded);
-        console.log('userId', userId);
-
-        if (users.find(user => user.id === userId)) {
+        if (await usersService.getUserByEmail(email)) {
             console.log('found user!');
-            req.userId = userId;
+            req.email = email;
         }
     } catch (e) {
         return next();
@@ -53,16 +34,13 @@ export const jwtAuthenticationMiddleware = (req, res, next) => {
 
 // This middleware stops the request if a user is not authenticated.
 export async function isAuthenticatedMiddleware(req, res, next) {
-    if (req.userId) {
+    if (req.email) {
         return next();
     }
-
-    res.status(401);
-    res.json({ error: 'User not authenticated' });
+    res.status(401).json({ error: 'User not authenticated' });
 }
 
-// This endpoints generates and returns a JWT access token given authentication
-// data.
+// This endpoints generates and returns a JWT access token given authentication data.
 export async function jwtLogin(req, res) {
     const { email, password } = req.body;
     const user = await usersService.login(email, password);

@@ -9,7 +9,7 @@ async function register(email, password, fullName) {
 }
 
 async function getUserByEmail(email) {
-    return await usersDB.register(email);
+    return await usersDB.getUserByEmail(email);
 }
 
-module.exports = {register, login}
+module.exports = {register, login, getUserByEmail}
