@@ -7,9 +7,7 @@ var nnode = require('nnode');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var messagesRouter = require('./routes/messages');
 const bodyParser = require("body-parser");
-const {jwtLogin, jwtAuthenticationMiddleware} = require('./services/jwt-authentication');
 
 var app = express();
 
@@ -27,8 +25,6 @@ app.use(bodyParser.json());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/messages', messagesRouter)
-app.post('/jwt-login', jwtLogin);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
