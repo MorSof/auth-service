@@ -1,9 +1,7 @@
-import {encodeToken, jwtVerification} from "../services/jwt-authentication";
 
 const express = require('express');
 const router = express.Router();
 const usersService = require('../services/users-service');
-const {jwtLogin} = require("../services/jwt-authentication");
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
