@@ -4,7 +4,9 @@ const usersDB = require('../db/users-db');
 const bcrypt = require('bcrypt');
 const {SALT_ROUNDS = 10} = process.env;
 const {APP_SECRET = 'something really random'} = process.env;
-const {VALID_SESSION_SECONDS = 3600} = process.env;
+let {VALID_SESSION_SECONDS = 3600} = process.env;
+
+VALID_SESSION_SECONDS = parseInt(VALID_SESSION_SECONDS)
 
 async function login(email, password) {
     let user = await getUserByEmail(email);
